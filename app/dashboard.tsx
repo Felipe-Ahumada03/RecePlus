@@ -1,6 +1,8 @@
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { usePathname, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useUser } from './UserContext';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const recipes = [
   {
@@ -30,19 +32,29 @@ const topIngredients = Object.entries(ingredientCount)
   .slice(0, 3);
 
 export default function Dashboard() {
-  const pathname = usePathname();
+  const pathname = usePathname(); 
+  const { user, setUser } = useUser();
+
+  const handleLogout = () => {
+    setUser(null);
+    router.replace('/LoginScreen');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Image source={{ uri: 'https://img.icons8.com/ios-filled/50/4CAF50/chef-hat.png' }} style={styles.logo} />
         <Text style={styles.title}>¡Bienvenido a RecePlus!</Text>
+        {user && (
+          <TouchableOpacity onPress={handleLogout} style={{ marginLeft: 'auto', backgroundColor: '#e8f5e9', padding: 8, borderRadius: 8 }}>
+            <Text style={{ color: '#22c55e', fontWeight: 'bold' }}>Cerrar sesión</Text>
+          </TouchableOpacity>
+        )}
       </View>
       <ScrollView style={styles.content}>
-        <View style={styles.welcomeBox}>
-          <Text style={styles.welcomeTitle}>Tu dashboard culinario</Text>
+        <View style={styles.welcomeBox}>          <Text style={styles.welcomeTitle}>Tu dashboard culinario</Text>
           <Text style={styles.welcomeSubtitle}>Descubre tu progreso, estadísticas y recomendaciones personalizadas.</Text>
-        </View>
-        <View style={styles.cardRow}>
+        </View>        <View style={styles.cardRow}>
           <View style={styles.card}>
             <Ionicons name="book-outline" size={32} color="#22c55e" style={{marginBottom: 6}} />
             <Text style={styles.cardValue}>{recipes.length}</Text>

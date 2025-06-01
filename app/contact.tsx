@@ -1,182 +1,195 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Platform, Image, StatusBar, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Platform, Image, StatusBar, Alert, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router, usePathname } from 'expo-router';
 
 export default function Contact() {
   const [checked, setChecked] = React.useState(''); // Cambiado de 'no' a ''
   const pathname = usePathname();
-  
+
+  const handleSend = () => {
+    Keyboard.dismiss();
+    setTimeout(() => {
+      Alert.alert('Mensaje enviado', 'Tu mensaje ha sido enviado correctamente.');
+    }, 100);
+  };
+
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={[styles.header, {justifyContent: 'flex-start'}]}>
-        <View style={styles.logoContainer}>
-          <TouchableOpacity onPress={() => router.push('/')} style={{flexDirection:'row',alignItems:'center'}} activeOpacity={0.8}>
-            <Image source={{ uri: 'https://img.icons8.com/ios-filled/50/4CAF50/chef-hat.png' }} style={styles.logo} />
-            <Text style={styles.logoTitle}>RecePlus</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <ScrollView style={styles.content}>
-        <Text style={styles.title}>Contacto</Text>
-        <Text style={styles.subtitle}>
-          Estamos aquí para ayudarte. Envíanos un mensaje y te responderemos lo antes posible.
-        </Text>
-
-        {/* Información de contacto */}
-        <View style={styles.contactInfoContainer}>
-          <Text style={styles.contactInfoTitle}>Información de contacto</Text>
-          <Text style={styles.contactInfoSubtitle}>Otras formas de ponerte en contacto con nosotros</Text>
-          
-          <View style={styles.contactItem}>
-            <Ionicons name="mail-outline" size={24} color="#2e7d32" />
-            <View style={styles.contactItemContent}>
-              <Text style={styles.contactItemTitle}>Correo electrónico</Text>
-              <Text style={styles.contactItemText}>soporte@receplus.com</Text>
-              <Text style={styles.contactItemSubtext}>Respondemos antes de 24 horas hábiles</Text>
-            </View>
-          </View>
-
-          <View style={styles.contactItem}>
-            <Ionicons name="call-outline" size={24} color="#2e7d32" />
-            <View style={styles.contactItemContent}>
-              <Text style={styles.contactItemTitle}>Teléfono</Text>
-              <Text style={styles.contactItemText}>+1 (555) 123-4567</Text>
-              <Text style={styles.contactItemSubtext}>Lunes a viernes, 8:00 AM - 6:00 PM (EST)</Text>
-            </View>
-          </View>
-
-          <View style={styles.contactItem}>
-            <Ionicons name="location-outline" size={24} color="#2e7d32" />
-            <View style={styles.contactItemContent}>
-              <Text style={styles.contactItemTitle}>Dirección</Text>
-              <Text style={styles.contactItemText}>123 Calle Culinaria</Text>
-              <Text style={styles.contactItemText}>Ciudad Gastronómica, CG 12345</Text>
-              <Text style={styles.contactItemText}>País de las Recetas</Text>
-            </View>
-          </View>
-        </View>
-
-        <Text style={styles.formTitle}>Formulario de contacto</Text>
-        <Text style={styles.formSubtitle}>
-          Completa el formulario para enviarnos un mensaje
-        </Text>
-
-        <View style={styles.inputGroup}>
-          <View style={styles.inputRow}>
-            <View style={styles.inputHalf}>
-              <TextInput 
-                style={styles.input}
-                placeholder="Tu nombre"
-                placeholderTextColor="#666"
-              />
-            </View>
-            <View style={styles.inputHalf}>
-              <TextInput 
-                style={styles.input}
-                placeholder="Tu apellido"
-                placeholderTextColor="#666"
-              />
-            </View>
-          </View>
-
-          <TextInput 
-            style={styles.input}
-            placeholder="tu@ejemplo.com"
-            placeholderTextColor="#666"
-            keyboardType="email-address"
-          />
-
-          <TextInput 
-            style={styles.input}
-            placeholder="Selecciona un asunto"
-            placeholderTextColor="#666"
-          />
-
-          <TextInput 
-            style={[styles.input, styles.textArea]}
-            placeholder="Escribe tu mensaje aquí..."
-            placeholderTextColor="#666"
-            multiline
-            numberOfLines={4}
-          />
-
-          <Text style={styles.radioLabel}>¿Eres usuario de RecePlus?</Text>
-          <View style={styles.radioGroup}>
-            <TouchableOpacity 
-              style={[
-                styles.radioOption, 
-                checked === 'si' && styles.radioOptionSelected
-              ]}
-              onPress={() => setChecked('si')}
-            >
-              <View style={styles.radioCircle}>
-                {checked === 'si' && <View style={styles.radioInnerCircle} />}
-              </View>
-              <Text style={checked === 'si' ? styles.radioTextSelected : styles.radioText}>Sí</Text>
+    <KeyboardAvoidingView style={{flex:1}} behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}>
+      <View style={styles.container}>
+        {/* Header */}
+        <View style={[styles.header, {justifyContent: 'flex-start'}]}>
+          <View style={styles.logoContainer}>
+            <TouchableOpacity onPress={() => router.push('/')} style={{flexDirection:'row',alignItems:'center'}} activeOpacity={0.8}>
+              <Image source={{ uri: 'https://img.icons8.com/ios-filled/50/4CAF50/chef-hat.png' }} style={styles.logo} />
+              <Text style={styles.logoTitle}>RecePlus</Text>
             </TouchableOpacity>
+          </View>
+        </View>
+
+        <ScrollView style={styles.content} keyboardShouldPersistTaps="handled">
+          <Text style={styles.title}>Contacto</Text>
+          <Text style={styles.subtitle}>
+            Estamos aquí para ayudarte. Envíanos un mensaje y te responderemos lo antes posible.
+          </Text>
+
+          {/* Información de contacto */}
+          <View style={styles.contactInfoContainer}>
+            <Text style={styles.contactInfoTitle}>Información de contacto</Text>
+            <Text style={styles.contactInfoSubtitle}>Otras formas de ponerte en contacto con nosotros</Text>
             
-            <TouchableOpacity 
-              style={[
-                styles.radioOption, 
-                checked === 'no' && styles.radioOptionSelected
-              ]}
-              onPress={() => setChecked('no')}
-            >
-              <View style={styles.radioCircle}>
-                {checked === 'no' && <View style={styles.radioInnerCircle} />}
+            <View style={styles.contactItem}>
+              <Ionicons name="mail-outline" size={24} color="#2e7d32" />
+              <View style={styles.contactItemContent}>
+                <Text style={styles.contactItemTitle}>Correo electrónico</Text>
+                <Text style={styles.contactItemText}>soporte@receplus.com</Text>
+                <Text style={styles.contactItemSubtext}>Respondemos antes de 24 horas hábiles</Text>
               </View>
-              <Text style={checked === 'no' ? styles.radioTextSelected : styles.radioText}>No</Text>
-            </TouchableOpacity>
+            </View>
+
+            <View style={styles.contactItem}>
+              <Ionicons name="call-outline" size={24} color="#2e7d32" />
+              <View style={styles.contactItemContent}>
+                <Text style={styles.contactItemTitle}>Teléfono</Text>
+                <Text style={styles.contactItemText}>+1 (555) 123-4567</Text>
+                <Text style={styles.contactItemSubtext}>Lunes a viernes, 8:00 AM - 6:00 PM (EST)</Text>
+              </View>
+            </View>
+
+            <View style={styles.contactItem}>
+              <Ionicons name="location-outline" size={24} color="#2e7d32" />
+              <View style={styles.contactItemContent}>
+                <Text style={styles.contactItemTitle}>Dirección</Text>
+                <Text style={styles.contactItemText}>123 Calle Culinaria</Text>
+                <Text style={styles.contactItemText}>Ciudad Gastronómica, CG 12345</Text>
+                <Text style={styles.contactItemText}>País de las Recetas</Text>
+              </View>
+            </View>
           </View>
 
-          <TouchableOpacity style={styles.submitButton} onPress={() => Alert.alert('Mensaje enviado', 'Tu mensaje ha sido enviado correctamente.') }>
-            <Text style={styles.submitButtonText}>Enviar mensaje</Text>
+          <Text style={styles.formTitle}>Formulario de contacto</Text>
+          <Text style={styles.formSubtitle}>
+            Completa el formulario para enviarnos un mensaje
+          </Text>
+
+          <View style={styles.inputGroup}>
+            <View style={styles.inputRow}>
+              <View style={styles.inputHalf}>
+                <TextInput 
+                  style={styles.input}
+                  placeholder="Tu nombre"
+                  placeholderTextColor="#666"
+                />
+              </View>
+              <View style={styles.inputHalf}>
+                <TextInput 
+                  style={styles.input}
+                  placeholder="Tu apellido"
+                  placeholderTextColor="#666"
+                />
+              </View>
+            </View>
+
+            <TextInput 
+              style={styles.input}
+              placeholder="tu@ejemplo.com"
+              placeholderTextColor="#666"
+              keyboardType="email-address"
+            />
+
+            <TextInput 
+              style={styles.input}
+              placeholder="Selecciona un asunto"
+              placeholderTextColor="#666"
+            />
+
+            <TextInput 
+              style={[styles.input, styles.textArea]}
+              placeholder="Escribe tu mensaje aquí..."
+              placeholderTextColor="#666"
+              multiline
+              numberOfLines={4}
+            />
+
+            <Text style={styles.radioLabel}>¿Eres usuario de RecePlus?</Text>
+            <View style={styles.radioGroup}>
+              <TouchableOpacity 
+                style={[
+                  styles.radioOption, 
+                  checked === 'si' && styles.radioOptionSelected
+                ]}
+                onPress={() => setChecked('si')}
+              >
+                <View style={styles.radioCircle}>
+                  {checked === 'si' && <View style={styles.radioInnerCircle} />}
+                </View>
+                <Text style={checked === 'si' ? styles.radioTextSelected : styles.radioText}>Sí</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={[
+                  styles.radioOption, 
+                  checked === 'no' && styles.radioOptionSelected
+                ]}
+                onPress={() => setChecked('no')}
+              >
+                <View style={styles.radioCircle}>
+                  {checked === 'no' && <View style={styles.radioInnerCircle} />}
+                </View>
+                <Text style={checked === 'no' ? styles.radioTextSelected : styles.radioText}>No</Text>
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity 
+              style={styles.submitButton} 
+              activeOpacity={0.7}
+              onPress={handleSend}
+            >
+              <Text style={styles.submitButtonText}>Enviar mensaje</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+
+        {/* Barra de navegación inferior */}
+        <View style={styles.bottomNav}>
+          <TouchableOpacity 
+            style={[styles.navItem, pathname === '/' && styles.activeNavItem]} 
+            onPress={() => router.push('/')}
+          >
+            <Ionicons name="home-outline" size={24} color={pathname === '/' ? '#22c55e' : '#2e7d32'} />
+            <Text style={[styles.navText, pathname === '/' && styles.activeNavText]}>Inicio</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.navItem, pathname === '/recipes' && styles.activeNavItem]} 
+            onPress={() => router.push('/recipes')}
+          >
+            <Ionicons name="book-outline" size={24} color={pathname === '/recipes' ? '#22c55e' : '#2e7d32'} />
+            <Text style={[styles.navText, pathname === '/recipes' && styles.activeNavText]}>Recetas</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.navItem, pathname === '/preferences' && styles.activeNavItem]} 
+            onPress={() => router.push('/preferences')}
+          >
+            <Ionicons name="settings-outline" size={24} color={pathname === '/preferences' ? '#22c55e' : '#2e7d32'} />
+            <Text style={[styles.navText, pathname === '/preferences' && styles.activeNavText]}>Preferencias</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.navItem, pathname === '/membership' && styles.activeNavItem]} 
+            onPress={() => router.push('/membership')}
+          >
+            <Ionicons name="person-outline" size={24} color={pathname === '/membership' ? '#22c55e' : '#2e7d32'} />
+            <Text style={[styles.navText, pathname === '/membership' && styles.activeNavText]}>Membresía</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.navItem, pathname === '/contact' && styles.activeNavItem]} 
+            onPress={() => router.push('/contact')}
+          >
+            <Ionicons name="mail-outline" size={24} color={pathname === '/contact' ? '#22c55e' : '#2e7d32'} />
+            <Text style={[styles.navText, pathname === '/contact' && styles.activeNavText]}>Contacto</Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
-
-      {/* Barra de navegación inferior */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity 
-          style={[styles.navItem, pathname === '/' && styles.activeNavItem]} 
-          onPress={() => router.push('/')}
-        >
-          <Ionicons name="home-outline" size={24} color={pathname === '/' ? '#22c55e' : '#2e7d32'} />
-          <Text style={[styles.navText, pathname === '/' && styles.activeNavText]}>Inicio</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.navItem, pathname === '/recipes' && styles.activeNavItem]} 
-          onPress={() => router.push('/recipes')}
-        >
-          <Ionicons name="book-outline" size={24} color={pathname === '/recipes' ? '#22c55e' : '#2e7d32'} />
-          <Text style={[styles.navText, pathname === '/recipes' && styles.activeNavText]}>Recetas</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.navItem, pathname === '/preferences' && styles.activeNavItem]} 
-          onPress={() => router.push('/preferences')}
-        >
-          <Ionicons name="settings-outline" size={24} color={pathname === '/preferences' ? '#22c55e' : '#2e7d32'} />
-          <Text style={[styles.navText, pathname === '/preferences' && styles.activeNavText]}>Preferencias</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.navItem, pathname === '/membership' && styles.activeNavItem]} 
-          onPress={() => router.push('/membership')}
-        >
-          <Ionicons name="person-outline" size={24} color={pathname === '/membership' ? '#22c55e' : '#2e7d32'} />
-          <Text style={[styles.navText, pathname === '/membership' && styles.activeNavText]}>Membresía</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.navItem, pathname === '/contact' && styles.activeNavItem]} 
-          onPress={() => router.push('/contact')}
-        >
-          <Ionicons name="mail-outline" size={24} color={pathname === '/contact' ? '#22c55e' : '#2e7d32'} />
-          <Text style={[styles.navText, pathname === '/contact' && styles.activeNavText]}>Contacto</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

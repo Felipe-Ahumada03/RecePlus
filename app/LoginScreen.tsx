@@ -1,14 +1,43 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useUser } from './UserContext';
+
+// Cambia esta IP por la de tu PC en la red local
+const BACKEND_URL = 'http://192.168.56.1:3000'; // <-- pon aquí tu IP local
 
 export default function LoginScreen({ navigation }: any) {
   const router = useRouter();
+  const { setUser } = useUser();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // Lógica de autenticación
+  const handleLogin = async () => {
+    const id = email;
+    try {
+      // Busca usuario en backend
+      const res = await fetch(`${BACKEND_URL}/usuarios/buscar/${id}`);
+      if (res.ok) {
+        const userData = await res.json();
+        setUser(userData || { id, nombre: email, email });
+        router.replace('/dashboard');
+      } else {
+        // Si no existe, créalo
+        const createRes = await fetch(`${BACKEND_URL}/usuarios/insertar`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, nombre: email })
+        });
+        if (createRes.ok) {
+          setUser({ id, nombre: email, email });
+          router.replace('/dashboard');
+        } else {
+          alert('No se pudo crear el usuario.');
+        }
+      }
+    } catch (e) {
+      alert('Error de conexión con el backend.');
+    }
   };
 
   return (

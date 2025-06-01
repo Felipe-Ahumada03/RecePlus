@@ -1,17 +1,45 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useUser } from './UserContext';
+
+// Cambia esta IP por la de tu PC en la red local
+const BACKEND_URL = '192.168.56.1:3000'; // <-- pon aquí tu IP local
 
 export default function RegisterScreen({ navigation }: any) {
   const router = useRouter();
+  const { setUser } = useUser();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
 
-  const handleRegister = () => {
-    // Lógica de registro
+  const handleRegister = async () => {
+    if (!name || !email || !password || !confirm) {
+      alert('Completa todos los campos');
+      return;
+    }
+    if (password !== confirm) {
+      alert('Las contraseñas no coinciden');
+      return;
+    }
+    const id = email;
+    try {
+      const res = await fetch(`${BACKEND_URL}/usuarios/insertar`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, nombre: name })
+      });
+      if (res.ok) {
+        setUser({ id, nombre: name, email });
+        router.replace('/dashboard');
+      } else {
+        alert('No se pudo crear el usuario.');
+      }
+    } catch (e) {
+      alert('Error de conexión con el backend.');
+    }
   };
 
   return (

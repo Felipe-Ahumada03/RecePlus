@@ -180,11 +180,11 @@ export default function Home() {
             </View>
             <View style={styles.footerCol}>
               <Text style={styles.footerColTitle}>NAVEGACIÓN</Text>
-              <Text style={styles.footerLink}>Inicio</Text>
-              <Text style={styles.footerLink}>Recetas</Text>
-              <Text style={styles.footerLink}>Preferencias</Text>
-              <Text style={styles.footerLink}>Membresía</Text>
-              <Text style={styles.footerLink}>Contacto</Text>
+              <TouchableOpacity onPress={() => router.push('/')}> <Text style={styles.footerLink}>Inicio</Text> </TouchableOpacity>
+              <TouchableOpacity onPress={() => router.push('/recipes')}> <Text style={styles.footerLink}>Recetas</Text> </TouchableOpacity>
+              <TouchableOpacity onPress={() => router.push('/preferences')}> <Text style={styles.footerLink}>Preferencias</Text> </TouchableOpacity>
+              <TouchableOpacity onPress={() => router.push('/membership')}> <Text style={styles.footerLink}>Membresía</Text> </TouchableOpacity>
+              <TouchableOpacity onPress={() => router.push('/contact')}> <Text style={styles.footerLink}>Contacto</Text> </TouchableOpacity>
             </View>
             <View style={styles.footerCol}>
               <Text style={styles.footerColTitle}>LEGAL</Text>
@@ -194,9 +194,9 @@ export default function Home() {
             </View>
             <View style={styles.footerCol}>
               <Text style={styles.footerColTitle}>CONTACTO</Text>
-              <Text style={styles.footerLink}>Formulario de contacto</Text>
-              <Text style={styles.footerLink}>soporte@receplus.com</Text>
-              <Text style={styles.footerLink}>+1 (555) 123-4567</Text>
+              <TouchableOpacity onPress={() => router.push('/contact')}> <Text style={styles.footerLink}>Formulario de contacto</Text> </TouchableOpacity>
+              <TouchableOpacity onPress={() => {}}><Text style={styles.footerLink}>soporte@receplus.com</Text></TouchableOpacity>
+              <TouchableOpacity onPress={() => {}}><Text style={styles.footerLink}>+1 (555) 123-4567</Text></TouchableOpacity>
             </View>
           </View>
           <View style={styles.footerCopyright}>
